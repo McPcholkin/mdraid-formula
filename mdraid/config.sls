@@ -17,7 +17,7 @@ test:
 {% set absent = salt['pillar.get']('mdraid:raids:'~raid~':absent', False) %}
 {% set name = salt['pillar.get']('mdraid:raids:'~raid~':name', False) %}
 {% set level = salt['pillar.get']('mdraid:raids:'~raid~':level', '1') %}
-{% set chunk = salt['pillar.get']('mdraid:raids:'~raid~':chunk', '256') %}
+{% set chunk = salt['pillar.get']('mdraid:raids:'~raid~':chunk', False) %}
 {% set run = salt['pillar.get']('mdraid:raids:'~raid~':run', True) %}
 {% set devices = salt['pillar.get']('mdraid:raids:'~raid~':devices', False) %}
 
@@ -33,7 +33,9 @@ create_raid_{{ raid }}:
     - name: {{ name }}
     - level: {{ level }}
     - devices: {{ devices }}
+    {% if chunk %}
     - chunk: {{ chunk }}
+    {% endif %}
     - run: {{ run }}
     - require:
       - pkg: install_mdadm
